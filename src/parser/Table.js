@@ -2,9 +2,12 @@ const _ = require('lodash');
 
 class Table {
   constructor($, $table) {
-    const $rows = $table.find('tbody tr');
+    this.headers = [];
+    $table.find('thead th').each((_, th) =>
+      this.headers.push($(th).text())
+    );
 
-    this.data = $rows.map((_, row) =>
+    this.data = $table.find('tbody tr').map((_, row) =>
       [$(row).find('td').map((_, td) =>
         $(td)
       ).get()]
@@ -14,7 +17,6 @@ class Table {
   }
 
   setHeaders(headers) {
-    this.data = this.data.filter(row => row.length === headers.length);
     this.headers = headers;
   }
 
@@ -35,11 +37,9 @@ class Table {
   }
 
   toObjects() {
-    if (!this.headers) {
-      throw new Error('Call setHeaders first');
-    }
+    const data = this.data.filter(row => row.length === this.headers.length);
 
-    return this.data.map((values) => {
+    return data.map((values) => {
       let object = _.zipObject(this.headers, values);
 
       object = _.mapValues(object, (value, key) => {

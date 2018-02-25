@@ -1,30 +1,11 @@
 const fetch = require('./network/fetch');
-const Table  = require ('./parser/Table');
 const colors = require('colors');
+const manifestParser = require('./pages/manifest');
+const coresParser = require('./pages/cores');
 
-fetch('https://www.reddit.com/r/spacex/wiki/launches/manifest', ($) => {
+const fetchAll = async () => {
+  const manifest = await fetch('https://www.reddit.com/r/spacex/wiki/launches/manifest').then(manifestParser);
+  const cores = await fetch('https://www.reddit.com/r/spacex/wiki/cores').then(coresParser);
+};
 
-  let $table = $('#wiki_upcoming_falcon_launches').next();
-  const table = new Table($, $table);
-  table.setHeaders(['date', 'vehicle', 'launch_site', 'orbit', 'payload_mass', 'payload', 'customer', 'notes']);
-  table.addNullMapper('date', 'TBA');
-  table.addNullMapper('orbit', '?');
-  table.addNullMapper('payload_mass', '?');
-  table.addNullMapper('payload', '?');
-  table.addMapper('notes', (data) => {
-    const text = data.text();
-    const refs = data.find('a').toArray().map(a => a.attribs.href);
-
-    return {
-      official: text.includes('O'),
-      source: text.includes('S'),
-      manned: text.includes('M'),
-      reuse: text.includes('R'),
-      test: text.includes('T'),
-      refs: refs,
-    }
-  });
-
-  console.log(' Found ' + (table.data.length + ' missions').green);
-  console.log(table.toObjects());
-});
+fetchAll();
