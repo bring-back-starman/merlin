@@ -115,6 +115,13 @@ dashdash@^1.12.0:
   dependencies:
     assert-plus "^1.0.0"
 
+date-range@bring-back-starman/date-range:
+  version "1.0.0"
+  resolved "https://codeload.github.com/bring-back-starman/date-range/tar.gz/b37fb0a0628abf669507574660337487a6d0a8f5"
+  dependencies:
+    lodash "^4.17.5"
+    moment "^2.20.1"
+
 delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
@@ -163,6 +170,10 @@ ecc-jsbn@~0.1.1:
 entities@^1.1.1, entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
+
+es6-enum@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/es6-enum/-/es6-enum-1.1.0.tgz#6f23485d9617ad2daaa42d0df303846a6488a361"
 
 extend@~3.0.1:
   version "3.0.1"
@@ -299,6 +310,10 @@ mime-types@^2.1.12, mime-types@~2.1.17:
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.18.tgz#6f323f60a83d11146f831ff11fd66e2fe5503bb8"
   dependencies:
     mime-db "~1.33.0"
+
+moment@^2.20.1:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
 nth-check@~1.0.1:
   version "1.0.1"

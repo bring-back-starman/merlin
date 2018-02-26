@@ -1,17 +1,15 @@
 const Table  = require ('../parser/Table');
 const colors = require('colors');
+const DateRange = require('date-range');
 
-// fetch('').then(($) => {
 const parser = ($) => {
-
-  let $table = $('#wiki_upcoming_falcon_launches').next();
-  const table = new Table($, $table);
-  table.setHeaders(['date', 'vehicle', 'launch_site', 'orbit', 'payload_mass', 'payload', 'customer', 'notes']);
-  table.addNullMapper('date', 'TBA');
-  table.addNullMapper('orbit', '?');
-  table.addNullMapper('payload_mass', '?');
-  table.addNullMapper('payload', '?');
-  table.addMapper('notes', (data) => {
+  const upcomingTable = new Table($, $('#wiki_upcoming_falcon_launches').next());
+  upcomingTable.setHeaders(['date', 'vehicle', 'launch_site', 'orbit', 'payload_mass', 'payload', 'customer', 'notes']);
+  upcomingTable.addTextMapper('date', (data) => new DateRange(data));
+  upcomingTable.addNullMapper('orbit', '?');
+  upcomingTable.addNullMapper('payload_mass', '?');
+  upcomingTable.addNullMapper('payload', '?');
+  upcomingTable.addMapper('notes', (data) => {
     const text = data.text();
     const refs = data.find('a').toArray().map(a => a.attribs.href);
 
@@ -25,10 +23,23 @@ const parser = ($) => {
     }
   });
 
-  let data = table.toObjects();
-  console.log(' Found ' + (data.length + ' missions').green);
+  const upcoming = upcomingTable.toObjects();
+  console.log(' Found ' + (upcoming.length + ' upcoming missions').green);
 
-  return Promise.resolve(data);
+
+  const pastTable = new Table($, $('#wiki_past_launches').next().next());
+  pastTable.setHeaders(['date', 'vehicle', 'core', 'launch_site', 'orbit', 'payload_mass', 'payload', 'customer', 'outcome', 'landing']);
+  pastTable.addTextMapper('date', (data) => new DateRange(data));
+  pastTable.addNullMapper('payload_mass', '?');
+  pastTable.addTextMapper('core', (text) => text.match(/b\d{4}/ig));
+
+  const past = pastTable.toObjects();
+  console.log(' Found ' + (past.length + ' past missions').green);
+
+  return Promise.resolve({
+    upcoming,
+    past
+  });
 };
 
 module.exports = parser;

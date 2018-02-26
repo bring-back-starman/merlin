@@ -1,31 +1,34 @@
-const Table  = require ('../parser/Table');
 const colors = require('colors');
+const DateRange = require('date-range');
 
 const parser = ($) => {
-  const cores = [];
+  const launches = [];
 
-  $('h6').each((_, h6) => {
-    const $title = $(h6);
-    const match = $title.text().match(/B\d{4}/);
+  $('.wiki-page-content h4').each((_, h4) => {
+    const $title = $(h4);
+    const $data = $title.next();
+    const $name = $data.find('strong a:nth-last-child(2)');
+    const links = {};
 
-    if (match) {
-      const info = (new Table($, $title.next())).headers;
+    $data.find('em a').each((_, a) => {
+      const $a = $(a);
+      links[$a.text()] = $a.attr('href');
+    });
 
-      cores.push({
-        name: match[0],
-        vehicle: info[0],
-        version: info[1],
-        block: info[2].match(/block *(.+)/i)[1],
-        flights: info[3].match(/(\d+) *flight/i)[1],
-        status: info[4],
-        story: $title.next().next().text(),
-      });
-    }
+    launches.push({
+      name: $name.text() || $data.find('strong').text().match(/\[(.+)]/)[1],
+      flight: $title.text(),
+      vehicle: $title.prevAll('h3').first().text(),
+      date: new DateRange($data.find('strong').text().match(/^[a-z0-9 ]+/i)[0]),
+      status: $data.find('strong a').last().text(),
+      youtube: $name.attr('href') || null,
+      links,
+    });
   });
 
-  console.log(' Found ' + (cores.length + ' cores').green);
+  console.log(' Found ' + (launches.length + ' launches').green);
 
-  return Promise.resolve(cores);
+  return Promise.resolve(launches);
 };
 
 module.exports = parser;

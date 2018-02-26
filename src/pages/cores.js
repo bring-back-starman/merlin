@@ -18,6 +18,7 @@ const parser = ($) => {
         block: info[2].match(/block *(.+)/i)[1],
         flights: info[3].match(/(\d+) *flight/i)[1],
         status: info[4],
+        story: $title.next().next().text(),
       });
     }
   });
