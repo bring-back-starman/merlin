@@ -1,4 +1,4 @@
-const getQueryBody = ({ query, variables }) => ({
+const getQueryBody = ({ query, variables }) => JSON.stringify({
   query,
   variables,
 });
