@@ -1,15 +1,18 @@
 const request = require('request');
+
+const config = require('../config');
 const { getQueryBody } = require('./utils');
 const { missionQuery } = require('./mutations');
 
 const persistMission = (mission) => {
+  const { jwt, graphql } = config;
   const { payload, date } = mission;
 
   request({
-    uri: `${process.env.GRAPHQL_URL}`,
+    uri: `${graphql.uri}`,
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.JWT_TOKEN}`,
+      Authorization: `Bearer ${jwt.token}`,
       'Content-Type': 'application/json',
     },
     body: getQueryBody({
