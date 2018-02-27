@@ -10,4 +10,4 @@ const fetchAll = async () => {
   const launches = await fetch('https://www.reddit.com/r/spacex/wiki/launches').then(launchesParser);
 };
 
-fetchAll();
+fetchAll().then(console.log).catch(console.error);
