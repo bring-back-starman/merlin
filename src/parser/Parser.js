@@ -29,6 +29,8 @@ class Parser {
       return require('../mocks/' + name + '.json');
     }
 
+    console.log('Getting ' + name.yellow + ' from the web.');
+
     const json = await fetch(url).then(parser);
     fs.writeFileSync(mockLocation, JSON.stringify(json, null, 2));
 

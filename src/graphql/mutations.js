@@ -14,7 +14,16 @@ const createMission = gql`
     }
 `;
 
+const createOrbit = gql`
+    mutation ($orbit: NewOrbit!) {
+        createOrbit(orbit: $orbit) {
+            acronym
+        }
+    }
+`;
+
 module.exports = {
   deleteMissions,
   createMission,
+  createOrbit,
 };

@@ -38,9 +38,38 @@ const parser = ($) => {
   const past = pastTable.toObjects();
   console.log(' Found ' + (past.length + ' past missions').green);
 
+  const orbitTable = new Table($, $('[id^="wiki_orbits_"]').next().next());
+  orbitTable.setHeaders(['acronym', 'name', 'altitude_km', 'inclination_deg', 'launch_capability', 'description']);
+  orbitTable.addNullMapper('inclination_deg', 'N/A');
+  orbitTable.addTextMapper('altitude_km', (altitude) => {
+    if (altitude === 'N/A') {
+      return null;
+    }
+
+    altitude = altitude.replace(/[^0-9>-]/g, '');
+
+    if (altitude.match(/^\d+$/)) {
+      return { min: parseInt(altitude), max: parseInt(altitude) };
+    }
+
+    if (altitude.match(/^\d+-\d+$/)) {
+      const [min, max] = altitude.split('-').map(a => parseInt(a));
+      return { min, max };
+    }
+
+    if (altitude.match(/^>\d+$/)) {
+      return { min: parseInt(altitude.substr(1)), max: null };
+    }
+  });
+  orbitTable.addTextMapper('launch_capability', (capability) => capability === 'Yes' && true || capability === 'No' && false || null);
+
+  const orbits = orbitTable.toObjects();
+  console.log(' Found ' + (orbits.length + ' orbits').green);
+
   return Promise.resolve({
     upcoming,
-    past
+    past,
+    orbits,
   });
 };
 
