@@ -1,9 +1,20 @@
-const missionQuery = `mutation CreateMission($name: String!, $date: String!) {
-  createMission(name: $name, date: $date) {
-    id
-  }
-}`;
+const gql = require('graphql-tag');
+
+const deleteMissions = gql`
+    mutation {
+        deleteMissions
+    }
+`;
+
+const createMission = gql`
+    mutation ($mission: NewMission!) {
+        createMission(mission: $mission) {
+            id
+        }
+    }
+`;
 
 module.exports = {
-  missionQuery,
+  deleteMissions,
+  createMission,
 };

@@ -1,30 +1,20 @@
-const request = require('request');
+const { createApolloFetch } = require('apollo-fetch');
 
 const config = require('../config');
-const { getQueryBody } = require('./utils');
-const { missionQuery } = require('./mutations');
+const { deleteMissions, createMission } = require('./mutations');
 
-const persistMission = (mission) => {
-  const { jwt, graphql } = config;
-  const { payload, date } = mission;
+const apolloFetch = createApolloFetch({ uri: config.graphql.uri });
 
-  request({
-    uri: `${graphql.uri}`,
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${jwt.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: getQueryBody({
-      query: missionQuery,
-      variables: {
-        name: `${payload} mission`,
-        date,
-      },
-    }),
-  });
-};
+apolloFetch.use(({ request, options }, next) => {
+  if (!options.headers) {
+    options.headers = {};
+  }
+  options.headers['authorization'] = 'Bearer ' + config.graphql.token;
+
+  next();
+});
 
 module.exports = {
-  persistMission,
+  deleteMissions: () => apolloFetch({ query: deleteMissions }),
+  createMission: (mission) => apolloFetch({ query: createMission, variables: { mission } }),
 };

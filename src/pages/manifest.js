@@ -6,6 +6,7 @@ const parser = ($) => {
   const upcomingTable = new Table($, $('#wiki_upcoming_falcon_launches').next());
   upcomingTable.setHeaders(['date', 'vehicle', 'launch_site', 'orbit', 'payload_mass', 'payload', 'customer', 'notes']);
   upcomingTable.addTextMapper('date', (data) => new DateRange(data));
+  upcomingTable.addTextMapper('vehicle', (vehicle) => vehicle.replace(/ *♺/g, ''));
   upcomingTable.addNullMapper('orbit', '?');
   upcomingTable.addNullMapper('payload_mass', '?');
   upcomingTable.addNullMapper('payload', '?');
@@ -30,6 +31,7 @@ const parser = ($) => {
   const pastTable = new Table($, $('#wiki_past_launches').next().next());
   pastTable.setHeaders(['date', 'vehicle', 'core', 'launch_site', 'orbit', 'payload_mass', 'payload', 'customer', 'outcome', 'landing']);
   pastTable.addTextMapper('date', (data) => new DateRange(data));
+  pastTable.addTextMapper('vehicle', (vehicle) => vehicle.replace(/ *v\d\.\d/, ''));
   pastTable.addNullMapper('payload_mass', '?');
   pastTable.addTextMapper('core', (text) => text.match(/b\d{4}/ig));
 

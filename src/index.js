@@ -1,13 +1,25 @@
-const fetch = require('./network/fetch');
 const colors = require('colors');
-const manifestParser = require('./pages/manifest');
-const coresParser = require('./pages/cores');
-const launchesParser = require('./pages/launches');
+const parser = require('./parser/Parser');
+const requests = require('./graphql/requests');
 
 const fetchAll = async () => {
-  const manifest = await fetch('https://www.reddit.com/r/spacex/wiki/launches/manifest').then(manifestParser);
-  const cores = await fetch('https://www.reddit.com/r/spacex/wiki/cores').then(coresParser);
-  const launches = await fetch('https://www.reddit.com/r/spacex/wiki/launches').then(launchesParser);
+  const launches = await parser.getLaunches();
+
+  console.log('Nuking database'.red);
+  await requests.deleteMissions();
+
+  launches.forEach(({ name, flight, date, status, youtube, story }) => {
+    requests.createMission({
+      name,
+      launchNumber: flight,
+      date,
+      missionOutcome: status,
+      launchVideo: youtube,
+      description: story,
+    })
+  });
+
+  console.log('Created '  + (launches.length + '').yellow + ' missions');
 };
 
-fetchAll().then(console.log).catch(console.error);
+fetchAll().catch(console.error);

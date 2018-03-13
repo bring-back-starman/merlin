@@ -9,10 +9,8 @@ require('dotenv-safe').load({
 
 module.exports = {
   env,
-  jwt: {
-    token: process.env.JWT_TOKEN
-  },
   graphql: {
-    uri: process.env.GRAPHQL_URL
+    uri: process.env.GRAPHQL_URL,
+    token: process.env.JWT_TOKEN
   }
 };

@@ -5,10 +5,13 @@
     "start": "node src/index.js"
   },
   "dependencies": {
+    "apollo-fetch": "^0.7.0",
     "cheerio": "^1.0.0-rc.2",
     "colors": "^1.1.2",
     "date-range": "bring-back-starman/date-range",
     "dotenv-safe": "^5.0.1",
+    "graphql": "^0.13.1",
+    "graphql-tag": "^2.8.0",
     "lodash": "^4.17.5",
     "request": "^2.83.0"
   }
