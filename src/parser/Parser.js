@@ -7,19 +7,19 @@ const coresParser = require('../pages/cores');
 const launchesParser = require('../pages/launches');
 
 class Parser {
-  async getManifest(fromMock = true) {
+  getManifest(fromMock = false) {
     return this.getJson('manifest', 'https://www.reddit.com/r/spacex/wiki/launches/manifest', manifestParser, fromMock);
   }
 
-  async getCores(fromMock = true) {
+  getCores(fromMock = false) {
     return this.getJson('cores', 'https://www.reddit.com/r/spacex/wiki/cores', coresParser, fromMock);
   }
 
-  async getLaunches(fromMock = true) {
+  getLaunches(fromMock = false) {
     return this.getJson('launches', 'https://www.reddit.com/r/spacex/wiki/launches', launchesParser, fromMock);
   }
 
-  async getJson(name, url, parser, fromMock = true) {
+  async getJson(name, url, parser, fromMock = false) {
     const mockLocation = path.join(__dirname, '../mocks/', name + '.json');
     const mockExists = fs.existsSync(mockLocation);
 
