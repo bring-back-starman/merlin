@@ -12,7 +12,7 @@ const fetchAll = async () => {
   for (let mission of launches) {
     const existingMission = missionMatcher(existingMissions, mission);
     const id = existingMission && existingMission.id || null;
-    const { name, launchNumber, date, missionOutcome, launchVideo, description, vehicle } = mission;
+    const { name, launchNumber, date, outcome, launchVideo, description, vehicle } = mission;
 
     if (existingMission && existingMission.name !== name) {
       console.log('Assuming same mission:', existingMission.name.yellow, '//', name.green);
@@ -23,7 +23,7 @@ const fetchAll = async () => {
       name,
       launchNumber,
       date,
-      missionOutcome,
+      outcome,
       launchVideo,
       description,
       vehicle,

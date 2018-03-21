@@ -24,7 +24,7 @@ const parser = ($) => {
       launchNumber: title && parseInt(title[1]) || null,
       vehicle: vehicleParser($title.prevAll('h3').first().text()),
       date: new DateRange($data.find('strong').text().match(/^[a-z0-9 ]+/i)[0]),
-      missionOutcome: $data.find('strong a').last().text(),
+      outcome: $data.find('strong a').last().text(),
       launchVideo: $name.attr('href') || null,
       links,
       description: $story.find('li').text().replace("\n", ' '),
