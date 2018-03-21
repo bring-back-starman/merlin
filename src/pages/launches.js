@@ -1,3 +1,5 @@
+import { vehicleParser } from '../parser/helpers';
+
 const colors = require('colors');
 const DateRange = require('date-range');
 
@@ -9,23 +11,23 @@ const parser = ($) => {
     const $data = $title.next();
     const $story = $data.next('ul');
     const $name = $data.find('strong a:nth-last-child(2)');
-    const links = {};
+    const links = [];
     const title = $title.text().match(/Flight (\d+)/);
 
     $data.find('> a, em a').each((_, a) => {
       const $a = $(a);
-      links[$a.text().replace(/ *\[PDF] *$/, '')] = $a.attr('href').replace(/^\//, 'https://www.reddit.com/');
+      links.push({ name: $a.text().replace(/ *\[PDF] *$/, ''), url: $a.attr('href').replace(/^\//, 'https://www.reddit.com/') });
     });
 
     launches.push({
-      name: $name.text() || $data.find('strong').text().match(/\[(.+)]/)[1],
-      flight: title && title[1] || $title.text(),
-      vehicle: $title.prevAll('h3').first().text(),
+      name: ($name.text() || $data.find('strong').text().match(/\[(.+)]/)[1]).replace(/^flight \d+ . /i, ''),
+      launchNumber: title && parseInt(title[1]) || null,
+      vehicle: vehicleParser($title.prevAll('h3').first().text()),
       date: new DateRange($data.find('strong').text().match(/^[a-z0-9 ]+/i)[0]),
-      status: $data.find('strong a').last().text(),
-      youtube: $name.attr('href') || null,
+      missionOutcome: $data.find('strong a').last().text(),
+      launchVideo: $name.attr('href') || null,
       links,
-      story: $story.find('li').text().replace("\n", ' '),
+      description: $story.find('li').text().replace("\n", ' '),
     });
   });
 

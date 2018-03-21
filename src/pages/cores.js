@@ -1,3 +1,5 @@
+import { vehicleParser } from '../parser/helpers';
+
 const Table  = require ('../parser/Table');
 const colors = require('colors');
 
@@ -9,16 +11,17 @@ const parser = ($) => {
     const match = $title.text().match(/B\d{4}/);
 
     if (match) {
-      const info = (new Table($, $title.next())).headers;
+      const [vehicle, version, block, flights, status] = (new Table($, $title.next())).headers;
+      const [name] = match;
 
       cores.push({
-        name: match[0],
-        vehicle: info[0],
-        version: info[1],
-        block: info[2].match(/block *(.+)/i)[1],
-        flights: info[3].match(/(\d+) *flight/i)[1],
-        status: info[4],
-        story: $title.next().next().text(),
+        name,
+        vehicle: vehicleParser(vehicle),
+        version,
+        block: parseInt(block.match(/block *(.+)/i)[1]),
+        flights: parseInt(flights.match(/(\d+) *flight/i)[1]),
+        status,
+        description: $title.next().next().text(),
       });
     }
   });
