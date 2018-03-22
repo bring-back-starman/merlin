@@ -1,12 +1,12 @@
-const gql = require('graphql-tag');
+import gql from 'graphql-tag';
 
-const deleteMissions = gql`
+export const deleteMissions = gql`
     mutation {
         deleteMissions
     }
 `;
 
-const createMission = gql`
+export const createMission = gql`
     mutation ($mission: NewMission!) {
         createMission(mission: $mission) {
             id
@@ -14,16 +14,10 @@ const createMission = gql`
     }
 `;
 
-const createOrbit = gql`
+export const createOrbit = gql`
     mutation ($orbit: NewOrbit!) {
         createOrbit(orbit: $orbit) {
             acronym
         }
     }
 `;
-
-module.exports = {
-  deleteMissions,
-  createMission,
-  createOrbit,
-};

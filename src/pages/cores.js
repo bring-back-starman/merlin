@@ -1,9 +1,9 @@
-import { vehicleParser } from '../parser/helpers';
+import colors from 'colors';
 
-const Table  = require ('../parser/Table');
-const colors = require('colors');
+import { vehicleParser } from './utils/helpers';
+import Table from './utils/Table';
 
-const parser = ($) => {
+export default ($) => {
   const cores = [];
 
   $('h6').each((_, h6) => {
@@ -30,5 +30,3 @@ const parser = ($) => {
 
   return Promise.resolve(cores);
 };
-
-module.exports = parser;

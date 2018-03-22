@@ -1,8 +1,8 @@
-const request = require('request');
-const colors = require('colors');
-const cheerio = require('cheerio');
+import request from 'request';
+import colors from 'colors';
+import cheerio from 'cheerio';
 
-const fetch = (url) => {
+export default (url) => {
   console.log('fetching '.yellow + url);
 
   return new Promise((resolve, reject) => {
@@ -21,5 +21,3 @@ const fetch = (url) => {
     });
   });
 };
-
-module.exports = fetch;

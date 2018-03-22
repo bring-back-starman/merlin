@@ -1,6 +1,6 @@
-const gql = require('graphql-tag');
+import gql from 'graphql-tag';
 
-const getMissions = gql`
+export const getMissions = gql`
     {
         missions(limit: 1000, type: ALL) {
             id
@@ -16,7 +16,3 @@ const getMissions = gql`
         }
     }
 `;
-
-module.exports = {
-  getMissions,
-};

@@ -1,8 +1,8 @@
-const { createApolloFetch } = require('apollo-fetch');
+import { createApolloFetch } from 'apollo-fetch';
 
-const config = require('../config');
-const { deleteMissions, createMission, createOrbit } = require('./mutations');
-const { getMissions } = require('./queries');
+import config from '../config';
+import { deleteMissions, createMission, createOrbit } from './mutations';
+import { getMissions } from './queries';
 
 const apolloFetch = createApolloFetch({ uri: config.graphql.uri });
 
@@ -15,7 +15,7 @@ apolloFetch.use(({ request, options }, next) => {
   next();
 });
 
-module.exports = {
+export default {
   deleteMissions: () => apolloFetch({ query: deleteMissions }),
   createMission: (mission) => apolloFetch({ query: createMission, variables: { mission } }),
   createOrbit: (orbit) => apolloFetch({ query: createOrbit, variables: { orbit } }),

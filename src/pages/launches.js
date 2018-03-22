@@ -1,9 +1,9 @@
-import { vehicleParser } from '../parser/helpers';
+import colors from 'colors';
+import DateRange from 'date-range';
 
-const colors = require('colors');
-const DateRange = require('date-range');
+import { vehicleParser } from './utils/helpers';
 
-const parser = ($) => {
+export default ($) => {
   const launches = [];
 
   $('.wiki-page-content h4').each((_, h4) => {
@@ -35,5 +35,3 @@ const parser = ($) => {
 
   return Promise.resolve(launches);
 };
-
-module.exports = parser;

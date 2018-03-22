@@ -10,7 +10,8 @@ export default (missions, mission) => {
 };
 
 function getScore(m1, m2) {
-  return vehicleRatio(m1, m2) * dateRatio(m1, m2) * launchNumberRatio(m1, m2) * missionNumberRatio(m1, m2) * nameRatio(m1, m2);
+  let nameR = nameRatio(m1, m2);
+  return vehicleRatio(m1, m2) * dateRatio(m1, m2) * launchNumberRatio(m1, m2) * missionNumberRatio(m1, m2) * (nameR > .7 ? nameR : 0);
 }
 
 

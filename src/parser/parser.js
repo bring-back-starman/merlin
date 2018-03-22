@@ -1,10 +1,11 @@
-const fs = require('fs');
-const colors = require('colors');
-const path = require('path');
-const fetch = require('../network/fetch');
-const manifestParser = require('../pages/manifest');
-const coresParser = require('../pages/cores');
-const launchesParser = require('../pages/launches');
+import fs from 'fs';
+import colors from 'colors';
+import path from 'path';
+
+import fetch from '../network/fetch';
+import manifestParser from '../pages/manifest';
+import coresParser from '../pages/cores';
+import launchesParser from '../pages/launches';
 
 class Parser {
   getManifest(fromMock = false) {
@@ -38,4 +39,4 @@ class Parser {
   }
 }
 
-module.exports = new Parser();
+export default new Parser();

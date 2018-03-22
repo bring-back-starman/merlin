@@ -1,10 +1,10 @@
-import { vehicleParser, altitudeParser, yesNoParser } from '../parser/helpers';
+import colors from 'colors';
+import DateRange from 'date-range';
 
-const Table  = require ('../parser/Table');
-const colors = require('colors');
-const DateRange = require('date-range');
+import Table from './utils/Table';
+import { vehicleParser, altitudeParser, yesNoParser } from './utils/helpers';
 
-const parser = ($) => {
+const parseUpcoming = ($) => {
   const upcomingTable = new Table($, $('#wiki_upcoming_falcon_launches').next());
   upcomingTable.setHeaders(['date', 'vehicle', 'launchSite', 'orbit', 'payloadMass', 'payload', 'customer', 'notes']);
   upcomingTable.addTextMapper('date', (data) => new DateRange(data));
@@ -29,7 +29,10 @@ const parser = ($) => {
   const upcoming = upcomingTable.toObjects();
   console.log(' Found ' + (upcoming.length + ' upcoming missions').green);
 
+  return upcoming;
+};
 
+const parsePast = ($) => {
   const pastTable = new Table($, $('#wiki_past_launches').next().next());
   pastTable.setHeaders(['date', 'vehicle', 'core', 'launchSite', 'orbit', 'payloadMass', 'payload', 'customer', 'outcome', 'landing']);
   pastTable.addTextMapper('date', (data) => new DateRange(data));
@@ -40,6 +43,10 @@ const parser = ($) => {
   const past = pastTable.toObjects();
   console.log(' Found ' + (past.length + ' past missions').green);
 
+  return past;
+};
+
+const parseOrbits = ($) => {
   const orbitTable = new Table($, $('[id^="wiki_orbits_"]').next().next());
   orbitTable.setHeaders(['acronym', 'name', 'altitudeKm', 'inclinationDeg', 'launchCapability', 'description']);
   orbitTable.addNullMapper('inclinationDeg', 'N/A');
@@ -49,11 +56,13 @@ const parser = ($) => {
   const orbits = orbitTable.toObjects();
   console.log(' Found ' + (orbits.length + ' orbits').green);
 
-  return Promise.resolve({
-    upcoming,
-    past,
-    orbits,
-  });
+  return orbits;
 };
 
-module.exports = parser;
+export default ($) => {
+  return Promise.resolve({
+    upcoming: parseUpcoming($),
+    past: parsePast($),
+    orbits: parseOrbits($),
+  });
+};
