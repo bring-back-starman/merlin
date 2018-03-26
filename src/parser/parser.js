@@ -6,6 +6,7 @@ import fetch from '../network/fetch';
 import manifestParser from '../pages/manifest';
 import coresParser from '../pages/cores';
 import launchesParser from '../pages/launches';
+import padsParser from '../pages/pads';
 
 class Parser {
   getManifest(fromMock = false) {
@@ -18,6 +19,10 @@ class Parser {
 
   getLaunches(fromMock = false) {
     return this.getJson('launches', 'https://www.reddit.com/r/spacex/wiki/launches', launchesParser, fromMock);
+  }
+
+  getPads(fromMock = false) {
+    return this.getJson('pads', 'https://www.reddit.com/r/SpaceX/wiki/pads', padsParser, fromMock);
   }
 
   async getJson(name, url, parser, fromMock = false) {

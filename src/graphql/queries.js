@@ -16,3 +16,16 @@ export const getMissions = gql`
         }
     }
 `;
+
+export const getPads = gql`
+    {
+        pads {
+            id
+            name
+            base
+            state
+            shortName
+            timeZone
+        }
+    }
+`;

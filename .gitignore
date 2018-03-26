@@ -3,4 +3,5 @@ node_modules/
 .env.production
 src/mocks/*
 !src/mocks/.gitkeep
+src/geo/timeZone.cache.json
 yarn-error.log

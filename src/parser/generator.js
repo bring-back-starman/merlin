@@ -1,8 +1,10 @@
 import colors from 'colors';
+import get from 'lodash/fp/get';
 
 import parser from './parser';
 import requests from '../graphql';
 import missionMatcher from '../matching/mission';
+import padMatcher from '../matching/pad';
 
 class Generator {
   async missionsFromRedditLaunches(fromMock = false) {
@@ -44,7 +46,7 @@ class Generator {
 
       const existingMission = missionMatcher(existingMissions, mission);
       const id = existingMission && existingMission.id || null;
-      const { date, vehicle, orbit, payload } = mission;
+      const { date, vehicle, orbit, payload, pad } = mission;
 
       if (existingMission && existingMission.name !== payload) {
         console.log('Assuming same mission:', existingMission.name.yellow, '//', payload.green);
@@ -55,6 +57,7 @@ class Generator {
         vehicle,
         orbit,
         date,
+        pad,
         name: existingMission && existingMission.name.length > payload.length ? existingMission.name : payload,
       });
     }
@@ -69,7 +72,7 @@ class Generator {
     for (let mission of manifest.past) {
       const existingMission = missionMatcher(existingMissions, mission);
       const id = existingMission && existingMission.id || null;
-      const { date, vehicle, orbit, payload } = mission;
+      const { date, vehicle, orbit, payload, pad } = mission;
 
       if (existingMission && existingMission.name !== payload) {
         console.log('Assuming same mission:', existingMission.name.yellow, '//', payload.green);
@@ -80,6 +83,7 @@ class Generator {
         vehicle,
         orbit,
         date,
+        pad,
         name: existingMission && existingMission.name.length > payload.length ? existingMission.name : payload,
       });
     }
@@ -102,6 +106,19 @@ class Generator {
     }
 
     console.log('Created '  + (manifest.orbits.length + '').yellow + ' orbits');
+  }
+
+  async padsFromRedditPads(fromMock = false) {
+    const existingPads = await requests.getPads();
+    const pads = await parser.getPads(fromMock);
+
+    for (let pad of pads) {
+      const existingMission = padMatcher(existingPads, pad);
+      const id = get('id', existingMission);
+      await requests.createPad({ id, ...pad });
+    }
+
+    console.log('Created '  + (pads.length + '').yellow + ' pads');
   }
 }
 

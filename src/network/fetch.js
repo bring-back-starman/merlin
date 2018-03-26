@@ -17,7 +17,11 @@ export default (url) => {
 
       console.log(' 200 OK'.green);
 
-      resolve(cheerio.load(body));
+      if (response.headers['content-type'].includes('application/json')) {
+        resolve(JSON.parse(body));
+      } else {
+        resolve(cheerio.load(body));
+      }
     });
   });
 };

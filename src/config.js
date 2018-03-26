@@ -12,5 +12,8 @@ module.exports = {
   graphql: {
     uri: process.env.GRAPHQL_URL,
     token: process.env.JWT_TOKEN
+  },
+  gmap: {
+    key: process.env.GMAP_API_KEY,
   }
 };

@@ -1,12 +1,14 @@
 import colors from 'colors';
 import DateRange from 'date-range';
+import requests from '../graphql';
+import padMatcher from '../matching/pad';
 
 import Table from './utils/Table';
 import { vehicleParser, altitudeParser, yesNoParser } from './utils/helpers';
 
-const parseUpcoming = ($) => {
+const parseUpcoming = ($, getPad) => {
   const upcomingTable = new Table($, $('#wiki_upcoming_falcon_launches').next());
-  upcomingTable.setHeaders(['date', 'vehicle', 'launchSite', 'orbit', 'payloadMass', 'payload', 'customer', 'notes']);
+  upcomingTable.setHeaders(['date', 'vehicle', 'pad', 'orbit', 'payloadMass', 'payload', 'customer', 'notes']);
   upcomingTable.addTextMapper('date', (data) => new DateRange(data));
   upcomingTable.addTextMapper('vehicle', vehicleParser);
   upcomingTable.addNullMapper('orbit', '?');
@@ -26,21 +28,41 @@ const parseUpcoming = ($) => {
     }
   });
 
-  const upcoming = upcomingTable.toObjects();
+  let upcoming = upcomingTable.toObjects();
+
+  upcoming = upcoming.map(launch => {
+    const pad = getPad(launch.pad);
+
+    launch.pad = pad.shortName || pad.name;
+    launch.date.setTimeZone(pad.timeZone);
+
+    return launch;
+  });
+
   console.log(' Found ' + (upcoming.length + ' upcoming missions').green);
 
   return upcoming;
 };
 
-const parsePast = ($) => {
+const parsePast = ($, getPad) => {
   const pastTable = new Table($, $('#wiki_past_launches').next().next());
-  pastTable.setHeaders(['date', 'vehicle', 'core', 'launchSite', 'orbit', 'payloadMass', 'payload', 'customer', 'outcome', 'landing']);
+  pastTable.setHeaders(['date', 'vehicle', 'core', 'pad', 'orbit', 'payloadMass', 'payload', 'customer', 'outcome', 'landing']);
   pastTable.addTextMapper('date', (data) => new DateRange(data));
   pastTable.addTextMapper('vehicle', vehicleParser);
   pastTable.addNullMapper('payloadMass', '?');
   pastTable.addTextMapper('core', (text) => text.match(/b\d{4}/ig));
 
-  const past = pastTable.toObjects();
+  let past = pastTable.toObjects();
+
+  past = past.map(launch => {
+    const pad = getPad(launch.pad);
+
+    launch.pad = pad.shortName || pad.name;
+    launch.date.setTimeZone(pad.timeZone);
+
+    return launch;
+  });
+
   console.log(' Found ' + (past.length + ' past missions').green);
 
   return past;
@@ -59,10 +81,13 @@ const parseOrbits = ($) => {
   return orbits;
 };
 
-export default ($) => {
+export default async ($) => {
+  const existingPads = await requests.getPads();
+  const getPad = (pad) => padMatcher(existingPads, pad);
+
   return Promise.resolve({
-    upcoming: parseUpcoming($),
-    past: parsePast($),
+    upcoming: parseUpcoming($, getPad),
+    past: parsePast($, getPad),
     orbits: parseOrbits($),
   });
 };
