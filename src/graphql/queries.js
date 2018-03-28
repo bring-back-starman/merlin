@@ -20,11 +20,10 @@ export const getMissions = gql`
 export const getPads = gql`
     {
         pads {
-            id
             name
+            shortName
             base
             state
-            shortName
             timeZone
         }
     }

@@ -8,10 +8,10 @@ import { vehicleParser, altitudeParser, yesNoParser } from './utils/helpers';
 
 const parseUpcoming = ($, getPad) => {
   const upcomingTable = new Table($, $('#wiki_upcoming_falcon_launches').next());
-  upcomingTable.setHeaders(['date', 'vehicle', 'pad', 'orbit', 'payloadMass', 'payload', 'customer', 'notes']);
+  upcomingTable.setHeaders(['date', 'vehicle', 'padShortName', 'orbitShortName', 'payloadMass', 'payload', 'customer', 'notes']);
   upcomingTable.addTextMapper('date', (data) => new DateRange(data));
   upcomingTable.addTextMapper('vehicle', vehicleParser);
-  upcomingTable.addNullMapper('orbit', '?');
+  upcomingTable.addNullMapper('orbitShortName', '?');
   upcomingTable.addNullMapper('payloadMass', '?');
   upcomingTable.addNullMapper('payload', '?');
   upcomingTable.addMapper('notes', (data) => {
@@ -31,9 +31,9 @@ const parseUpcoming = ($, getPad) => {
   let upcoming = upcomingTable.toObjects();
 
   upcoming = upcoming.map(launch => {
-    const pad = getPad(launch.pad);
+    const pad = getPad(launch.padShortName);
 
-    launch.pad = pad.shortName || pad.name;
+    launch.padShortName = pad.shortName || pad.name;
     launch.date.setTimeZone(pad.timeZone);
 
     return launch;
@@ -46,7 +46,7 @@ const parseUpcoming = ($, getPad) => {
 
 const parsePast = ($, getPad) => {
   const pastTable = new Table($, $('#wiki_past_launches').next().next());
-  pastTable.setHeaders(['date', 'vehicle', 'core', 'pad', 'orbit', 'payloadMass', 'payload', 'customer', 'outcome', 'landing']);
+  pastTable.setHeaders(['date', 'vehicle', 'core', 'padShortName', 'orbitShortName', 'payloadMass', 'payload', 'customer', 'outcome', 'landing']);
   pastTable.addTextMapper('date', (data) => new DateRange(data));
   pastTable.addTextMapper('vehicle', vehicleParser);
   pastTable.addNullMapper('payloadMass', '?');
@@ -55,9 +55,9 @@ const parsePast = ($, getPad) => {
   let past = pastTable.toObjects();
 
   past = past.map(launch => {
-    const pad = getPad(launch.pad);
+    const pad = getPad(launch.padShortName);
 
-    launch.pad = pad.shortName || pad.name;
+    launch.padShortName = pad.shortName || pad.name;
     launch.date.setTimeZone(pad.timeZone);
 
     return launch;
@@ -70,7 +70,7 @@ const parsePast = ($, getPad) => {
 
 const parseOrbits = ($) => {
   const orbitTable = new Table($, $('[id^="wiki_orbits_"]').next().next());
-  orbitTable.setHeaders(['acronym', 'name', 'altitudeKm', 'inclinationDeg', 'launchCapability', 'description']);
+  orbitTable.setHeaders(['shortName', 'name', 'altitudeKm', 'inclinationDeg', 'launchCapability', 'description']);
   orbitTable.addNullMapper('inclinationDeg', 'N/A');
   orbitTable.addTextMapper('altitudeKm', altitudeParser);
   orbitTable.addTextMapper('launchCapability', yesNoParser);

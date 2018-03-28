@@ -46,7 +46,7 @@ class Generator {
 
       const existingMission = missionMatcher(existingMissions, mission);
       const id = existingMission && existingMission.id || null;
-      const { date, vehicle, orbit, payload, pad } = mission;
+      const { date, vehicle, orbitShortName, payload, padShortName } = mission;
 
       if (existingMission && existingMission.name !== payload) {
         console.log('Assuming same mission:', existingMission.name.yellow, '//', payload.green);
@@ -55,9 +55,9 @@ class Generator {
       await requests.createMission({
         id,
         vehicle,
-        orbit,
+        orbitShortName,
         date,
-        pad,
+        padShortName,
         name: existingMission && existingMission.name.length > payload.length ? existingMission.name : payload,
       });
     }
@@ -72,7 +72,7 @@ class Generator {
     for (let mission of manifest.past) {
       const existingMission = missionMatcher(existingMissions, mission);
       const id = existingMission && existingMission.id || null;
-      const { date, vehicle, orbit, payload, pad } = mission;
+      const { date, vehicle, orbitShortName, payload, padShortName } = mission;
 
       if (existingMission && existingMission.name !== payload) {
         console.log('Assuming same mission:', existingMission.name.yellow, '//', payload.green);
@@ -81,9 +81,9 @@ class Generator {
       await requests.createMission({
         id,
         vehicle,
-        orbit,
+        orbitShortName,
         date,
-        pad,
+        padShortName,
         name: existingMission && existingMission.name.length > payload.length ? existingMission.name : payload,
       });
     }
@@ -95,10 +95,10 @@ class Generator {
     const manifest = await parser.getManifest(fromMock);
 
     for (let orbit of manifest.orbits) {
-      const { acronym, name, altitudeKm, description } = orbit;
+      const { shortName, name, altitudeKm, description } = orbit;
 
       await requests.createOrbit({
-        acronym,
+        shortName,
         name,
         altitudeKm,
         description,
@@ -109,16 +109,17 @@ class Generator {
   }
 
   async padsFromRedditPads(fromMock = false) {
-    const existingPads = await requests.getPads();
     const pads = await parser.getPads(fromMock);
 
     for (let pad of pads) {
-      const existingMission = padMatcher(existingPads, pad);
-      const id = get('id', existingMission);
-      await requests.createPad({ id, ...pad });
+      await requests.createPad(pad);
     }
 
     console.log('Created '  + (pads.length + '').yellow + ' pads');
+  }
+
+  async coresFromRedditCores(fromMock = false) {
+    const cores = await parser.getCores(fromMock);
   }
 }
 

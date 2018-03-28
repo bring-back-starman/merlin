@@ -33,7 +33,7 @@ export default async ($) => {
 
       const timeZone = await getTimeZone(location.join(','));
 
-      const shortName = get(1, $padTitle.text().match(/\((.+)\)/)) || null;
+      const shortName = get(1, $padTitle.text().match(/\((.+)\)/)) || name;
 
       pads.push({
         name,

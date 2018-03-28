@@ -11,7 +11,7 @@ export const createMission = gql`
 export const createOrbit = gql`
     mutation ($orbit: NewOrbit!) {
         createOrbit(orbit: $orbit) {
-            acronym
+            shortName
         }
     }
 `;
@@ -19,7 +19,7 @@ export const createOrbit = gql`
 export const createPad = gql`
     mutation ($pad: NewPad!) {
         createPad(pad: $pad) {
-            id
+            shortName
         }
     }
 `;
