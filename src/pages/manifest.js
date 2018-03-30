@@ -34,7 +34,7 @@ const parseUpcoming = ($, getPad) => {
     const pad = getPad(launch.padShortName);
 
     launch.padShortName = pad.shortName || pad.name;
-    launch.date.setTimeZone(pad.timeZone);
+    launch.date.setTimeZone('UTC');
 
     return launch;
   });
@@ -58,7 +58,7 @@ const parsePast = ($, getPad) => {
     const pad = getPad(launch.padShortName);
 
     launch.padShortName = pad.shortName || pad.name;
-    launch.date.setTimeZone(pad.timeZone);
+    launch.date.setTimeZone('UTC');
 
     return launch;
   });

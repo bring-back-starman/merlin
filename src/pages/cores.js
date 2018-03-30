@@ -103,10 +103,21 @@ export default ($) => {
             landing = false;
           }
 
+          let missionNumber = null;
+          let missionNumberMatch;
+
+          if (missionNumberMatch = m.mission.match(/F[9H]-(\d+)/)) {
+            missionNumber = missionNumberMatch[1];
+          }
+
+          if (missionNumberMatch = m.mission.match(/F(?:alcon )?9 Mission (\d+)/i)) {
+            missionNumber = missionNumberMatch[1];
+          }
+
           return {
             name: m.name,
             date: m.date,
-            mission: m.mission,
+            missionNumber,
             outcome: m.outcome,
             landing,
             campaignThread: get('mission', l),
